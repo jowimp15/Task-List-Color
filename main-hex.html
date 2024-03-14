@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1,
+    maximum-scale=1, user-scalable=no"
+    />
+    <title>Mis colores</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <style>
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      @keyframes translateIn {
+        from {
+          transform: translateY(-200%);
+          top: 30px;
+          right: 30px;
+          left: 30px;
+          bottom: 30px;
+        }
+        to {
+          transform: translateY(0);
+          top: 30px;
+          right: 30px;
+          left: 30px;
+          bottom: 30px;
+        }
+      }
+      @keyframes translateout {
+        from {
+          transform: translateY(0);
+          top: 30px;
+          right: 30px;
+          left: 30px;
+          bottom: 30px;
+        }
+        to {
+          transform: translateY(-200%);
+          top: 30px;
+          right: 30px;
+          left: 30px;
+          bottom: 30px;
+        }
+      }
+      @keyframes scaleIn {
+        from {
+          top: 30px;
+          right: 30px;
+          left: 30px;
+          bottom: 30px;
+        }
+        to {
+          top: 0px;
+          right: 0px;
+          left: 0px;
+          bottom: 0px;
+        }
+      }
+      @keyframes scaleout {
+        from {
+          top: 0px;
+          right: 0px;
+          left: 0px;
+          bottom: 0px;
+        }
+        to {
+          top: 30px;
+          right: 30px;
+          left: 30px;
+          bottom: 30px;
+        }
+      }
+      * {
+        font-size: 1.5rem;
+        font-weight: 900;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+      }
+      .only {
+        position: absolute;
+        left: 10px;
+        top: 20px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 15rem;
+
+        border: 2px solid black;
+        background-color: white;
+      }
+      .fisrt,
+      .second {
+        cursor: text;
+      }
+      button {
+        margin: 2rem auto;
+
+        padding: 0.5rem 1rem;
+        background-color: white;
+        border: 5px solid black;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+      button:hover {
+        transform: scale(1.1);
+      }
+      button:active {
+        background-color: black;
+        color: white;
+      }
+      .container {
+        width: 50vw;
+        height: 50vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border: 5px solid black;
+        border-radius: 20px;
+      }
+      .gradient {
+        position: fixed;
+        top: 0px;
+        right: 0px;
+        left: 0px;
+        bottom: 0px;
+        z-index: 1000;
+
+        /* animation: translateOut 1s ease 1s forwards, scaleOut 1s ease forwards; */
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        transform: translateY(0);
+        transition: transform 0.5s ease;
+      }
+      .close {
+        width: 4rem;
+        height: 4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 5px solid black;
+
+        font-size: 2rem;
+        font-weight: 900;
+
+        background-color: white;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .close:hover {
+        transform: scale(1.2);
+      }
+      .close:active {
+        transform: scale(1);
+        background-color: black;
+        color: white;
+        user-select: none;
+      }
+      .ocurtal {
+        transform: translateY(200%) scale(0.8);
+      }
+      .save {
+        font-size: 1rem;
+        margin: 0.5rem;
+        padding: 0.5rem;
+      }
+      /* .entrada {
+        animation: translateIn 1s ease forwards, scaleIn 1s ease 1s forwards;
+      }
+      .salida {
+      } */
+
+      /* pestaña de guardados */
+
+      .show-save {
+        position: absolute;
+        top: 50vh;
+        right: 10px;
+        z-index: 600;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        border: 5px solid black;
+
+        font-weight: 900;
+        background-color: white;
+        transition: right 0.5s ease, transform 0.5s ease;
+        cursor: pointer;
+        user-select: none;
+      }
+      .show-save:hover {
+        transform: scale(1.2);
+      }
+      .show-save:active {
+        background-color: black;
+        color: white;
+      }
+      .container-saves {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        right: 30px;
+        bottom: 30px;
+        z-index: 500;
+
+        background-color: white;
+
+        border-radius: 20px;
+        border: 5px solid black;
+        transform: translateX(200vw);
+        transition: transform 0.5s ease;
+      }
+
+      /* pestaña */
+      .delete-color,
+      .close-saves {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        font-weight: 900;
+
+        background-color: red;
+        color: white;
+
+        border: 2px solid black;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+      .delete-color:hover,
+      .close-saves:hover {
+        transform: scale(1.1);
+      }
+
+      .input-search-color {
+        position: sticky;
+        top: 0;
+        z-index: 800;
+
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-bottom: 2px solid black;
+      }
+      .input-color {
+        margin: 1rem 0;
+
+        border: none;
+        outline: none;
+        border: 3px solid black;
+        border-radius: 50px;
+        padding: 0.3rem;
+      }
+
+      .container-saves * {
+        font-size: 0.8rem;
+      }
+      .container-saves {
+        overflow-y: auto;
+      }
+      .container-color-save {
+        position: relative;
+
+        width: 12rem;
+        height: 12rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(215, 255, 255);
+
+        border: 5px solid black;
+        border-radius: 20px;
+        transition: transform 0.3s ease;
+      }
+      .container-color-save:hover {
+        border: 5px solid blue;
+        transform: scale(1.05);
+      }
+      .container-color-save p {
+        margin: 0.2rem;
+      }
+      .color-save-up,
+      .color-save-down {
+        width: 75%;
+        height: 1.5rem;
+        margin: 0.2rem auto;
+
+        border: 5px solid black;
+        border-radius: 20px;
+      }
+      .container-save2 {
+        display: grid;
+        padding: 1rem;
+        grid-template-columns: repeat(auto-fit, minmax(12rem, 12rem));
+        gap: 1rem 1rem;
+        justify-content: center;
+      }
+      .btn-save,
+      .btn-cancel {
+        padding: 0.3rem;
+        margin: 0.5rem auto;
+      }
+      .btn-save:hover {
+        background-color: #00ae00;
+      }
+      .btn-cancel:hover {
+        background-color: #ae0000;
+      }
+      .close-saves {
+        top: 20%;
+        right: 10px;
+
+        width: 2rem;
+        height: 2rem;
+      }
+      .guardado-correcto {
+        position: absolute;
+        top: -31rem;
+        left: 50%;
+
+        background-color: #00ae00;
+
+        border-radius: 20px;
+        border: 3px solid black;
+        transform: translateX(-50%);
+        transition: top 0.5s ease;
+      }
+      .guardado-correcto p {
+        font-size: 1.2rem;
+        margin: 1rem 0.5rem 0.5rem 0.5rem;
+      }
+
+      /** crear Nombre modal */
+
+      .guardar-name-container {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: #00000063;
+      }
+      .guardar-name {
+        width: 450px;
+        height: 350px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+
+        background-color: white;
+        border: 5px solid black;
+        border-radius: 30px;
+      }
+
+      .input-name-saveColor {
+        width: 75%;
+
+        font-size: 1rem;
+
+        font-weight: 500;
+        padding: 0.3rem;
+        outline: none;
+        border: 3px solid black;
+        border-radius: 50px;
+      }
+      .aceptar-nombre,
+      .cancelar-nombre {
+        margin: 0;
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+      /*/////////////////// js //////////////////////*/
+
+      .se-guardo {
+        top: -1rem;
+      }
+      .ocurtal-guardados {
+        right: -50vw;
+      }
+      .ocurtal-container {
+        transform: translateY(0);
+      }
+      .none {
+        display: none;
+      }
+      .bi-chevron-double-right {
+        font-size: 2rem;
+        rotate: 180deg;
+      }
+      .style-flex {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 auto;
+      }
+      .color-paragraph {
+        color: white;
+      }
+
+      /************************************************************************************************ Qery Tablets*/
+      @media screen and (max-width: 1200px) {
+        .only {
+          width: 10rem;
+        }
+      }
+      /************************************************************************************************ Qery landscape*/
+      @media screen and (orientation: landscape) and (max-height: 500px) {
+        html {
+          font-size: 14px;
+        }
+        .just-first {
+          position: relative;
+          top: 1rem;
+          left: 2rem;
+        }
+        .gradientes {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+
+          width: 11rem;
+        }
+        .container {
+          flex-direction: row;
+          margin-left: 5rem;
+        }
+      }
+      /************************************************************************************************ Qery movile*/
+      @media screen and (max-width: 450px) {
+        html {
+          font-size: 14px;
+        }
+        .container,
+        .gradientes,
+        .just-first {
+          position: relative;
+          top: 4rem;
+        }
+        .container {
+          width: 100vw;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="only">
+      <div class="fisrt"></div>
+      <div class="second"></div>
+      <button class="save">Guardar</button>
+    </div>
+    <button class="just-first">Body</button>
+    <!-- container -->
+    <div class="container">
+      <button class="just-second">Caja</button>
+      <button class="random">Ambos</button>
+    </div>
+    <button class="gradientes">Ver en gradientes</button>
+    <div class="gradient ocurtal">
+      <span class="close">X</span>
+    </div>
+    <div class="show-save"><i class="bi bi-chevron-double-right"></i></div>
+
+    <!-- pestaña -->
+
+    <div class="container-saves">
+      <div class="input-search-color">
+        <input type="text" placeholder="Buscar" required class="input-color" />
+        <span class="close-saves">X</span>
+      </div>
+      <div class="container-save2"></div>
+    </div>
+
+    <div class="guardado-correcto">
+      <p>Guardado</p>
+    </div>
+
+    <div class="guardar-name-container none">
+      <div class="guardar-name">
+        <label for="name-color" class="input-label-saveColor">Nombre</label>
+        <input
+          type="text"
+          maxlength="30"
+          required
+          class="input-name-saveColor"
+        />
+        <button class="aceptar-nombre">aceptar</button>
+        <button class="cancelar-nombre">cancelar</button>
+      </div>
+    </div>
+    <!-- template -->
+
+    <template class="template">
+      <div class="container-color-save">
+        <span class="delete-color">X</span>
+        <div class="color-save-up"></div>
+        <div class="color-save-down"></div>
+        <p class="hex-up"></p>
+        <p class="hex-down"></p>
+        <p class="name"></p>
+        <div class="edit-container">
+          <button class="btn-save none">Guardar</button>
+          <button class="btn-cancel none">Cancelar</button>
+        </div>
+      </div>
+    </template>
+
+    <script>
+      const d = document;
+
+      function hex() {
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+          let num = Math.round(Math.random() * 15);
+          switch (num) {
+            case 10:
+              num = "a";
+              break;
+            case 11:
+              num = "b";
+              break;
+            case 12:
+              num = "c";
+              break;
+            case 13:
+              num = "d";
+              break;
+            case 14:
+              num = "e";
+              break;
+            case 15:
+              num = "f";
+              break;
+            default:
+              break;
+          }
+          color += num;
+        }
+        return color;
+      }
+      let $slayerGradiente = d.querySelector(".gradient");
+
+      const fisrt = (color = "#fff") => {
+        d.body.style.backgroundColor = color;
+        d.querySelector(".fisrt").textContent = color;
+        d.querySelector(".fisrt").style.color = color;
+
+        return color;
+      };
+      const second = (color = "#fff") => {
+        d.querySelector(".container").style.backgroundColor = color;
+        d.querySelector(".second").textContent = color;
+        d.querySelector(".second").style.color = color;
+
+        return color;
+      };
+
+      let fisrtColor, secondColor;
+
+      d.addEventListener("click", (e) => {
+        if (e.target.matches(".just-first")) {
+          fisrtColor = fisrt(hex());
+          $slayerGradiente.style.backgroundImage = `linear-gradient(138deg, ${fisrtColor},${secondColor})`;
+        }
+        if (e.target.matches(".just-second")) {
+          fisrtColor = second(hex());
+          $slayerGradiente.style.backgroundImage = `linear-gradient(138deg, ${fisrtColor},${secondColor})`;
+        }
+        if (e.target.matches(".random")) {
+          fisrtColor = fisrt(hex());
+          secondColor = second(hex());
+          $slayerGradiente.style.backgroundImage = `linear-gradient(138deg, ${fisrtColor},${secondColor})`;
+        }
+        if (e.target.matches(".close")) {
+          d.querySelector(".gradient").classList.add("ocurtal");
+        }
+        if (e.target.matches(".gradientes")) {
+          d.querySelector(".gradient").classList.remove("ocurtal");
+        }
+        if (
+          e.target.matches(".show-save") ||
+          e.target.matches(".show-save *")
+        ) {
+          d.querySelector(".show-save").classList.add("ocurtal-guardados");
+          d.querySelector(".container-saves").classList.add(
+            "ocurtal-container"
+          );
+        }
+        if (e.target.matches(".close-saves")) {
+          d.querySelector(".show-save").classList.remove("ocurtal-guardados");
+          d.querySelector(".container-saves").classList.remove(
+            "ocurtal-container"
+          );
+        }
+      });
+      fisrtColor = fisrt(hex());
+      secondColor = second(hex());
+      $slayerGradiente.style.backgroundImage = `linear-gradient(138deg, ${fisrtColor} 30%, ${secondColor}  60%)`;
+
+      //***************************************************indexeDB
+
+      function IndexedDB() {
+        let bd;
+        let actualName; // para conservar el name actuar
+        let name; // esto es para el editor de texto contenteditable
+        let $template = d.querySelector(".template").content;
+
+        const colors = indexedDB.open("colores", 1);
+        colors.onsuccess = (e) => {
+          bd = e.target.result;
+          ejecutar();
+        };
+        colors.onerror = (err) => {
+          console.log(err);
+        };
+        colors.onupgradeneeded = (e) => {
+          bd = e.target.result;
+          if (!bd.objectStoreNames.contains("user")) {
+            let almacen = bd.createObjectStore("user", { autoIncrement: true });
+            almacen.createIndex("key", "nombre", { unique: false });
+          }
+        };
+
+        function ejecutar() {
+          // guardar
+          function guardar(first, second, name) {
+            return new Promise((res, rej) => {
+              if (name == false) {
+                name = "nuevo color";
+              }
+              let transaccion = bd.transaction(["user"], "readwrite");
+              let almacen = transaccion.objectStore("user");
+
+              let key = almacen.add({
+                primer: first,
+                segundo: second,
+                nombre: name,
+                llave: null,
+              });
+              transaccion.addEventListener("complete", () => {
+                d.querySelector(".guardado-correcto").classList.add(
+                  "se-guardo"
+                );
+                setTimeout(() => {
+                  d.querySelector(".guardado-correcto").classList.remove(
+                    "se-guardo"
+                  );
+                }, 1000);
+              });
+              let resultado;
+              key.onsuccess = (e) => {
+                res(e.target.result);
+              };
+            });
+          }
+
+          // leer datos
+          function readDAta() {
+            return new Promise((res, rej) => {
+              let fragmento = d.createDocumentFragment();
+              let transaccion = bd.transaction(["user"], "readonly");
+              let almacen = transaccion.objectStore("user");
+
+              let apuntador = almacen.openCursor();
+              apuntador.onsuccess = (e) => {
+                let cursor = e.target.result;
+                if (cursor) {
+                  $template.querySelector(
+                    ".color-save-up"
+                  ).style.backgroundColor = cursor.value.primer;
+                  $template.querySelector(
+                    ".color-save-down"
+                  ).style.backgroundColor = cursor.value.segundo;
+                  $template.querySelector(".hex-up").textContent =
+                    cursor.value.primer;
+                  $template.querySelector(".hex-down").textContent =
+                    cursor.value.segundo;
+                  $template.querySelector(".name").textContent =
+                    cursor.value.nombre;
+                  $template
+                    .querySelector(".btn-save")
+                    .setAttribute("data-key", cursor.value.llave);
+                  $template
+                    .querySelector(".btn-cancel")
+                    .setAttribute("data-key", cursor.value.llave);
+                  $template
+                    .querySelector(".delete-color")
+                    .setAttribute("data-key", cursor.value.llave);
+
+                  let clone = $template.cloneNode(true);
+                  fragmento.append(clone);
+                  cursor.continue();
+                } else {
+                  d.querySelector(".container-save2").innerHTML = "";
+                  d.querySelector(".container-save2").append(fragmento);
+                }
+              };
+            });
+          }
+
+          // editar
+          function editar(key, name) {
+            return new Promise((res, rej) => {
+              let transaccion = bd.transaction(["user"], "readwrite");
+              let almacen = transaccion.objectStore("user");
+
+              let data = almacen.get(key);
+              data.onsuccess = (e) => {
+                let elemento = e.target.result;
+                elemento.nombre = name || elemento.nombre;
+                elemento.llave = key;
+
+                let res = almacen.put(elemento, key);
+                res.onsuccess = (e) => {};
+              };
+            });
+          }
+
+          // borrar
+          function borral(key) {
+            return new Promise((res, rej) => {
+              let transaccion = bd.transaction(["user"], "readwrite");
+              let almacen = transaccion.objectStore("user");
+
+              let data = almacen.delete(key);
+              data.onsuccess = (e) => {
+                readDAta();
+              };
+            });
+          }
+
+          //****************************** eventos
+
+          // filtros input
+          d.querySelector(".input-color").addEventListener("keyup", (e) => {
+            if (e.target.value)
+              d.querySelector(".container-save2").classList.add("style-flex");
+            else
+              d.querySelector(".container-save2").classList.remove(
+                "style-flex"
+              );
+            for (const i of d.querySelector(".container-save2").children) {
+              if (
+                new RegExp(e.target.value, "igm").test(
+                  i.children[5].textContent
+                )
+              ) {
+                i.classList.remove("none");
+              } else {
+                i.classList.add("none");
+              }
+            }
+          });
+
+          // event click al d'
+          d.addEventListener("click", async (e) => {
+            if (e.target.matches(".save")) {
+              d.querySelector(".guardar-name-container").classList.remove(
+                "none"
+              );
+              d.querySelector(".input-name-saveColor").focus();
+            }
+            if (e.target.matches(".cancelar-nombre")) {
+              d.querySelector(".guardar-name-container").classList.add("none");
+              d.querySelector(".input-name-saveColor").value = "";
+            }
+            if (e.target.matches(".aceptar-nombre")) {
+              editar(
+                await guardar(
+                  fisrtColor,
+                  secondColor,
+                  d.querySelector(".input-name-saveColor").value
+                ),
+                null
+              );
+              d.querySelector(".guardar-name-container").classList.add("none");
+              d.querySelector(".input-name-saveColor").value = "";
+              readDAta();
+            }
+            if (e.target.matches(".name")) {
+              actualName = e.target.textContent;
+              e.target.setAttribute("contenteditable", "true");
+            } else {
+              d.querySelectorAll(".name").forEach((e) => {
+                e.removeAttribute("contenteditable");
+              });
+            }
+            if (e.target.matches(".btn-save")) {
+              editar(
+                parseInt(e.target.dataset.key),
+                e.target.parentElement.parentElement.children[5].textContent
+              );
+              e.target.nextElementSibling.classList.add("none");
+              e.target.classList.add("none");
+            }
+            if (e.target.matches(".btn-cancel")) {
+              e.target.parentElement.parentElement.children[5].textContent =
+                actualName;
+              e.target.classList.add("none");
+              e.target.previousElementSibling.classList.add("none");
+            }
+            if (e.target.matches(".delete-color")) {
+              if (
+                confirm(
+                  `Estas seguro qeu deseas borral "${e.target.parentElement.children[5].textContent}" para SIEMPRE`
+                )
+              ) {
+                borral(parseInt(e.target.dataset.key));
+              }
+            }
+          });
+
+          // editar nombre
+          d.addEventListener("input", (e) => {
+            if (e.target.matches(".name")) {
+              e.target.nextElementSibling.children[0].classList.remove("none");
+              e.target.nextElementSibling.children[1].classList.remove("none");
+
+              if (e.target.textContent.length === 30) {
+                name = e.target.textContent;
+              }
+              if (e.target.textContent.length > 30) {
+                e.target.textContent = name;
+              }
+            }
+          });
+
+          // ejecuciones
+          readDAta();
+        }
+      }
+      IndexedDB();
+    </script>
+  </body>
+</html>

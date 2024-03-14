@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis tareas</title>
+  </head>
+  <!-- bootstrap icon -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+  />
+  <!-- google font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Pacifico&family=Lobster&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    :root {
+      --principal-color: #393939;
+      --second-color: #1c1c1c;
+
+      /*- metodo de trys --*/
+
+      --step--3: clamp(0.51rem, calc(0.48rem + 0.12vw), 0.58rem);
+      --step--2: clamp(0.61rem, calc(0.57rem + 0.2vw), 0.72rem);
+      --step--1: clamp(0.73rem, calc(0.67rem + 0.3vw), 0.9rem);
+      --step-0: clamp(0.88rem, calc(0.79rem + 0.43vw), 1.13rem);
+      --step-1: clamp(1.05rem, calc(0.93rem + 0.62vw), 1.41rem);
+      --step-2: clamp(1.26rem, calc(1.09rem + 0.87vw), 1.76rem);
+      --step-3: clamp(1.51rem, calc(1.27rem + 1.19vw), 2.2rem);
+      --step-4: clamp(1.81rem, calc(1.49rem + 1.62vw), 2.75rem);
+      --step-5: clamp(2.18rem, calc(1.74rem + 2.18vw), 3.43rem);
+      --step-6: clamp(2.61rem, calc(2.03rem + 2.92vw), 4.29rem);
+      --step-7: clamp(3.14rem, calc(2.36rem + 3.88vw), 5.36rem);
+      --step-8: clamp(3.76rem, calc(2.74rem + 5.12vw), 6.71rem);
+      --step-9: clamp(4.51rem, calc(3.17rem + 6.73vw), 8.38rem);
+      --step-10: clamp(5.42rem, calc(3.66rem + 8.8vw), 10.48rem);
+    }
+
+    /********************************** animaciones *******************************/
+
+    @keyframes fade-in {
+      from {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    @keyframes fade-out {
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    /********************************** reseteos *******************************/
+    *,
+    ::before,
+    ::after {
+      box-sizing: border-box;
+    }
+    .title,
+    .title-task,
+    .li-task::marker {
+      font-family: "Lobster", cursive;
+    }
+    .task-text {
+      font-family: "Pacifico", cursive;
+      white-space: pre-line;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--principal-color);
+      overflow-x: hidden;
+    }
+    .style-btn {
+      font-size: var(--step-1);
+
+      background-color: var(--second-color);
+      border: 3px solid black;
+
+      padding: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      margin: 0 1rem;
+    }
+    .style-btn:hover,
+    .delete-task:hover,
+    .close-modal:hover,
+    .close-colors:hover {
+      transform: scale(1.1);
+    }
+
+    /********************************** cabezera *******************************/
+
+    .title {
+      font-size: var(--step-6);
+      margin: 0;
+      margin-left: 2rem;
+    }
+    .header {
+      height: var(--step-10);
+      margin-bottom: var(--step-5);
+      display: flex;
+      align-items: center;
+      border-bottom: 2rem dotted var(--principal-color);
+      border-top: 2rem dotted var(--principal-color);
+
+      background-color: var(--second-color);
+    }
+
+    /********************************** main *******************************/
+    .container-save-delete {
+      position: relative;
+
+      display: flex;
+      justify-content: space-between;
+    }
+    .container-delete {
+      padding: 0;
+
+      justify-content: center;
+      align-items: center;
+    }
+    .check-delete {
+      width: 1rem;
+      height: 1rem;
+    }
+    .label-borral {
+      display: inline-block;
+      padding: 1rem;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+    }
+    .bi-pencil-square {
+      margin: 0 0.5rem;
+    }
+
+    /*------- ------lista */
+    .container-list {
+      padding: 2rem 2rem 2rem 5rem;
+      display: flex;
+      flex-direction: column;
+
+      font-size: var(--step-2);
+    }
+    .li-task {
+      position: relative;
+
+      margin: 2rem 0;
+
+      background-color: var(--second-color);
+
+      padding: 0rem 2rem 1rem 2rem;
+      border: 4px solid black;
+      border-radius: 50px;
+    }
+    .li-task::marker {
+      font-size: var(--step-3);
+    }
+    .delete-task,
+    .close-modal,
+    .close-colors {
+      position: absolute;
+      top: 0;
+      right: 0;
+
+      width: 1rem;
+      height: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background-color: red;
+      border: 4px solid black;
+      padding: 1.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 2rem;
+      transition: transform 0.3s ease;
+    }
+    .delete-task:active,
+    .close-modal:active {
+      background-color: black;
+      color: white;
+    }
+    .show-task {
+      cursor: pointer;
+    }
+    .show-task:hover {
+      color: white;
+    }
+    .title-task {
+      display: inline-block;
+      margin: 0;
+    }
+    .btn-edit {
+      position: absolute;
+      bottom: -40px;
+      left: 10%;
+      padding: 0.5rem 1rem;
+
+      background-color: var(--principal-color);
+      border: 5px solid black;
+    }
+
+    /********************************** others *******************************/
+
+    /* modal del input */
+    .modal-create {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      z-index: 1000;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fade-out 0.3s ease forwards;
+
+      background-color: #00000058;
+    }
+    .form-create {
+      position: relative;
+
+      width: 80%;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+
+      background-color: var(--second-color);
+      border-radius: 30px;
+      padding: 2rem;
+    }
+    .title-modal-create {
+      margin: 0.5rem 0 3rem 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-size: var(--step-5);
+      text-align: center;
+    }
+    .container-title-input {
+      display: flex;
+      flex-direction: column;
+    }
+    .title-label,
+    .label-textarea {
+      text-align: center;
+      font-size: var(--step-4);
+      font-weight: 700;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 1rem;
+    }
+    .title-input {
+      font-size: var(--step-2);
+      align-self: flex-start;
+      margin: 0.5rem;
+      padding: 0.5rem;
+      margin-left: 0;
+
+      color: black !important;
+      border-radius: 50px;
+      border: 3px solid black;
+      outline: none;
+    }
+    .container-texttarea {
+      width: 100%;
+      height: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .label-textarea {
+      font-size: var(--step-2);
+    }
+    .task-textarea {
+      margin: 1rem auto;
+      width: 100%;
+      max-width: 752.891px;
+      height: 50%;
+      padding: 0.5rem;
+
+      font-size: var(--step-1);
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+
+      color: black !important;
+      border-radius: 30px;
+      border: 3px solid black;
+    }
+
+    .submit-input-task {
+      background-color: var(--principal-color);
+    }
+    .emptt {
+      font-size: var(--step-10);
+      text-align: center;
+      font-weight: 900;
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+      letter-spacing: var(--step-10);
+      -webkit-user-select: none;
+      -o-user-select: none;
+      user-select: none;
+      opacity: 0.3;
+    }
+
+    /* mdoal de elegir colores */
+    .btn-style-colors {
+      transform: translateX(0);
+      transition: transform 0.5s ease;
+    }
+    .close-colors {
+      right: -1rem;
+      top: -1rem;
+    }
+    .color-default,
+    .more-color {
+      margin: 2rem auto;
+
+      font-size: var(--step-1);
+      font-weight: 900;
+
+      background-color: white;
+      color: black !important;
+    }
+    .more-color {
+      display: block;
+      text-decoration: none;
+    }
+
+    .input-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background-color: white;
+      border-bottom: 2px solid black;
+    }
+    .input-search-color {
+      font-size: var(--step-1);
+      font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+
+      color: black !important;
+      border: 3px solid black;
+      border-radius: 50px;
+      padding: 0.5rem;
+    }
+    .principal-container-style {
+      position: fixed;
+      left: 1rem;
+      top: 50%;
+      z-index: 1000;
+
+      height: 98vh;
+      width: 400px;
+      display: grid;
+      grid-template-rows: 10% 80% 10%;
+
+      background-color: white;
+      border: 2px solid black;
+      box-shadow: 0px 0px 10px 2px black;
+
+      transform: translateY(-50%);
+      transition: left 0.5s ease;
+    }
+    .container-color {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      overflow: auto;
+    }
+    .container-color::-webkit-scrollbar {
+      background-color: var(--principal-color);
+      border-radius: 20px;
+    }
+    .container-color::-webkit-scrollbar-thumb {
+      background-color: var(--second-color);
+      border-radius: 20px;
+      border: 3px solid var(--principal-color);
+    }
+    .first-color {
+      position: relative;
+
+      width: 300px;
+      height: 300px;
+      flex-shrink: 0;
+      margin: 1rem auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background-color: #8d0202;
+      border: 2px solid black;
+      border-radius: 30px;
+      transition: box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .first-color:hover {
+      box-shadow: 0px 0px 30px 5px #019601;
+    }
+    .first-color:active {
+      transform: scale(0.95);
+    }
+    .name-color {
+      position: absolute;
+      top: -20px;
+
+      font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+      font-size: var(--step-0);
+      font-weight: 900;
+
+      color: black !important;
+      background-color: white;
+      border: 3px solid black;
+      padding: 0.5rem;
+      border-radius: 30px;
+    }
+    .second-color {
+      width: 150px;
+      height: 150px;
+
+      background-color: #028d6d;
+      border: 2px solid rgb(0, 0, 0);
+      border-radius: 10px;
+    }
+    .invert {
+      position: absolute;
+      bottom: -20px;
+      left: 35%;
+
+      color: black !important;
+      background-color: white;
+      border: 3px solid black;
+      padding: 0.5rem;
+    }
+    .invert:active,
+    .btn-change-text:active {
+      background-color: black;
+      color: white;
+    }
+    .cahnge-text-color {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-top: 2px solid black;
+    }
+    .btn-change-text {
+      font-weight: 900;
+      padding: 0.5rem;
+      font-size: var(--step-2);
+
+      color: black !important;
+      background-color: white;
+      border: 5px solid black;
+      border-radius: 20px;
+    }
+
+    @media screen and (max-width: 500px) {
+      .ocurtal-btn {
+        transform: translateX(-200%);
+      }
+      .header {
+        border-top: 1rem dotted var(--principal-color);
+        border-bottom: 1rem dotted var(--principal-color);
+        justify-content: center;
+      }
+      .title {
+        margin: 0;
+      }
+      .style-btn {
+        margin: 0;
+      }
+      .container-list {
+        padding-left: 2rem;
+      }
+      .container-save-delete {
+        position: fixed;
+        background-color: var(--principal-color);
+        bottom: 0;
+        left: 0;
+
+        z-index: 500;
+
+        width: 100vw;
+        align-items: center;
+        justify-content: end;
+
+        padding: 0 1rem;
+      }
+      .principal-container-style {
+        left: 0;
+        background-color: #ffffff91;
+
+        width: 100vw;
+        height: 100vh;
+      }
+      .first-color {
+        width: 200px;
+        height: 200px;
+      }
+      .second-color {
+        width: 100px;
+        height: 100px;
+      }
+      .close-colors {
+        right: 0;
+        top: 0;
+      }
+      .delete-task {
+        font-size: 1rem;
+        top: -1rem;
+        right: -1rem;
+
+        padding: 1rem;
+      }
+      .close-modal {
+        font-size: 1rem;
+        padding: 1rem;
+      }
+      .label-borral {
+        display: flex;
+      }
+      .form-create {
+        border-radius: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+      .title-modal-create {
+        margin: 0;
+        font-size: var(--step-4);
+      }
+      .title-label {
+        font-size: var(--step-2);
+      }
+      .label-textarea {
+        font-size: var(--step-1);
+      }
+      .title-input {
+        width: 80%;
+        align-self: center;
+      }
+      .title-task {
+        font-size: var(--step-1);
+      }
+    }
+
+    /********************************** style js*******************************/
+    .none {
+      display: none;
+    }
+    .title-margin {
+      margin: 1rem 0;
+    }
+    .task-despejado {
+      border-radius: 0px 50px 50px 50px;
+    }
+    .danger {
+      background-color: #8d0202;
+      color: white;
+    }
+    .body-color * {
+      color: white;
+    }
+    .ocurtal-btn {
+      transform: translateX(-100%);
+    }
+    .ocurtal-container-colors {
+      left: -100%;
+    }
+    .fade-in-create {
+      animation: fade-in 0.3s ease forwards;
+    }
+
+    /********************************** query movlie style js*******************************/
+    @media screen and (max-width: 500px) {
+      .ocurtal-container-colors {
+        left: -200%;
+      }
+    }
+  </style>
+  <body>
+    <!--------------------------- cabezera ------------------------------------ -->
+
+    <header class="header">
+      <h1 class="title">Lista de Tareas</h1>
+    </header>
+    <!--------------------------- main ------------------------------------ -->
+    <main>
+      <div class="container-save-delete">
+        <button class="btn-style-colors style-btn">
+          Estilos <i class="bi bi-palette"></i>
+        </button>
+        <button class="btn-guardar style-btn">
+          Crear una lista nueva <i class="bi bi-file-earmark-plus"></i>
+        </button>
+        <div class="container-delete style-btn">
+          <input type="checkbox" class="check-delete none" id="delete" />
+          <label for="delete" class="label-borral"
+            ><i class="bi bi-trash3"></i><i class="bi bi-trash3-fill none"></i
+            ><i class="bi bi-pencil-square"></i> Opciones</label
+          >
+        </div>
+      </div>
+
+      <!--lista  -->
+      <ol class="container-list"></ol>
+    </main>
+
+    <!-- -----------------------------------modal input  ------------------------------------------>
+    <div class="modal-create none">
+      <form action="" class="form-create">
+        <h2 class="title-modal-create">Creando nueva tarea</h2>
+        <div class="container-title-input">
+          <label for="title" class="title-label">Titulo</label>
+          <input
+            type="text"
+            required
+            name="title"
+            id="title"
+            class="title-input"
+            maxlength="50"
+          />
+        </div>
+        <div class="container-texttarea">
+          <label for="task" class="label-textarea"
+            >Escrive una descripcion de la tarea</label
+          >
+          <textarea
+            required
+            name="task"
+            minlength="5"
+            id="task"
+            class="task-textarea"
+          ></textarea>
+        </div>
+
+        <input
+          type="submit"
+          name="guardar"
+          value="guardar"
+          class="submit-input-task style-btn"
+          data-type="guardar"
+          data-key="0"
+        />
+        <span class="close-modal"><i class="bi bi-x-lg"></i></span>
+      </form>
+    </div>
+
+    <!-- -----------------------------------modal colores  ------------------------------------------>
+    <div class="principal-container-style ocurtal-container-colors">
+      <span class="close-colors"><i class="bi bi-x-lg"></i></span>
+      <div class="input-container">
+        <input type="text" placeholder="Buscar" class="input-search-color" />
+      </div>
+      <div class="container-color"></div>
+      <div class="cahnge-text-color">
+        <button title="cambiar el color del color" class="btn-change-text style-btn"></button>
+      </div>
+    </div>
+
+    <template class="template">
+      <li class="li-task">
+        <div class="container-title-task">
+          <span class="delete-task none"><i class="bi bi-x-lg"></i></span>
+          <h3 class="title-task"></h3>
+          <span class="show-task"
+            ><i class="bi bi-chevron-down"></i
+            ><i class="bi bi-chevron-up none"></i
+          ></span>
+        </div>
+        <p class="task-text none"></p>
+        <button class="btn-edit style-btn none">Editar</button>
+      </li>
+    </template>
+    <template class="template2">
+      <div class="first-color">
+        <p class="name-color"></p>
+        <div class="second-color"></div>
+        <div class="invert style-btn">Invertir</div>
+      </div>
+    </template>
+    <!-------------------------------------------------------------- script -->
+    <script>
+      let d = document;
+      let c = console;
+      /************************** localStorage****************/
+      if (!localStorage.getItem("text-color")) {
+        localStorage.setItem("text-color", "black");
+      }
+      if (localStorage.getItem("text-color") === "black") {
+        d.querySelector(".btn-change-text").textContent =
+          "Color de texto negro";
+        d.body.classList.add("body-color");
+      } else {
+        d.querySelector(".btn-change-text").textContent =
+          "Color de texto blanco";
+        d.body.classList.remove("body-color");
+      }
+
+      // colores
+
+      if (!localStorage.getItem("first-color")) {
+        localStorage.setItem(
+          "first-color",
+          getComputedStyle(d.documentElement).getPropertyValue(
+            "--principal-color"
+          )
+        );
+      }
+      if (!localStorage.getItem("second-color")) {
+        localStorage.setItem(
+          "second-color",
+          getComputedStyle(d.documentElement).getPropertyValue("--second-color")
+        );
+      }
+      d.documentElement.style.setProperty(
+        "--principal-color",
+        localStorage.getItem("first-color")
+      );
+      d.documentElement.style.setProperty(
+        "--second-color",
+        localStorage.getItem("second-color")
+      );
+
+      /************************** Change icon whn is phone ****************/
+
+      const query = innerWidth;
+      const mediaQuery = window.matchMedia("(max-width: 500px)");
+
+      function changeIcon(classElement, desktop, movile) {
+        query <= 500
+          ? (d.querySelector(classElement).innerHTML = movile)
+          : (d.querySelector(classElement).innerHTML = desktop);
+        mediaQuery.addEventListener("change", (e) => {
+          e.matches
+            ? (d.querySelector(classElement).innerHTML = movile)
+            : (d.querySelector(classElement).innerHTML = desktop);
+        });
+      }
+
+      changeIcon(
+        ".btn-style-colors",
+        'Estilos <i class="bi bi-palette"></i>',
+        '<i class="bi bi-palette"></i>'
+      );
+      changeIcon(
+        ".btn-guardar",
+        'Crear una lista nueva <i class="bi bi-file-earmark-plus"></i>',
+        '<i class="bi bi-file-earmark-plus"></i>'
+      );
+      changeIcon(
+        ".label-borral",
+        '<i class="bi bi-trash3"></i><i class="bi bi-trash3-fill none"></i><i class="bi bi-pencil-square"></i> Opciones',
+        '<i class="bi bi-trash3"></i><i class="bi bi-trash3-fill none"></i><i class="bi bi-pencil-square"></i>'
+      );
+
+      // cambio de Query
+
+      /************************** indexeDB ****************/
+
+      let fragmento = d.createDocumentFragment();
+      let fragmento2 = d.createDocumentFragment();
+      let $template = d.querySelector(".template").content;
+      let $template2 = d.querySelector(".template2").content;
+
+      async function indexeDB() {
+        let bd;
+        let bdColor;
+        let tareas = indexedDB.open("tareas", 1);
+        let colores = indexedDB.open("colores", 1);
+        colores.onsuccess = (e) => {
+          bdColor = e.target.result;
+          ejecutar2();
+        };
+        tareas.onsuccess = (e) => {
+          bd = e.target.result;
+          ejecutar();
+        };
+
+        colores.onerror = (e) => {
+          console.log(e.target.result);
+        };
+        tareas.onerror = (e) => {
+          console.log(e.target.result);
+        };
+        tareas.onupgradeneeded = (e) => {
+          bd = e.target.result;
+          if (!bd.objectStoreNames.contains("user")) {
+            let almacen = bd.createObjectStore("user", { autoIncrement: true });
+          }
+        };
+        colores.onupgradeneeded = (e) => {
+          bdColor = e.target.result;
+          if (!bdColor.objectStoreNames.contains("user")) {
+            let almacen = bdColor.createObjectStore("user", {
+              autoIncrement: true,
+            });
+          }
+        };
+
+        /*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
+        function ejecutar() {
+          // transaccion
+          function openBase(base, tipo) {
+            let transaccion = bd.transaction([base], tipo);
+            return transaccion.objectStore(base);
+          }
+
+          // funciones del label borral y editar
+          function active() {
+            d.querySelector(".label-borral").classList.add("danger");
+            d.querySelector(".bi-trash3").classList.add("none");
+            d.querySelector(".bi-trash3-fill").classList.remove("none");
+            let cont = d.querySelector(".container-list").children.length - 1;
+            for (let i = 0; i < cont; i++) {
+              d.querySelectorAll(".delete-task")[i].classList.remove("none");
+              d.querySelectorAll(".btn-edit")[i].classList.remove("none");
+            }
+          }
+          function noActive() {
+            d.getElementById("delete").checked = false;
+            d.querySelector(".label-borral").classList.remove("danger");
+            d.querySelector(".bi-trash3").classList.remove("none");
+            d.querySelector(".bi-trash3-fill").classList.add("none");
+            let cont = d.querySelector(".container-list").children.length - 1;
+            for (let i = 0; i < cont; i++) {
+              d.querySelectorAll(".delete-task")[i].classList.add("none");
+              d.querySelectorAll(".btn-edit")[i].classList.add("none");
+            }
+          }
+
+          // Guardar
+
+          function guardar(title, text) {
+            return new Promise((res, rej) => {
+              let base = openBase("user", "readwrite");
+              let success = base.add({ title, text, key: null });
+              success.onsuccess = (e) => {
+                res(e.target.result);
+              };
+            });
+          }
+
+          // leer
+          function leer() {
+            return new Promise((res, rej) => {
+              let base = openBase("user", "readonly");
+              let position = 1;
+              let apuntador = base.openCursor();
+              apuntador.onsuccess = (e) => {
+                let cursor = e.target.result;
+                if (cursor) {
+                  $template.querySelector(".title-task").textContent =
+                    cursor.value.title;
+                  $template.querySelector(".task-text").textContent =
+                    cursor.value.text;
+                  $template
+                    .querySelector(".li-task")
+                    .setAttribute("title", cursor.value.title);
+                  $template
+                    .querySelector(".li-task")
+                    .setAttribute("data-key", cursor.value.key);
+                  $template
+                    .querySelector(".li-task")
+                    .setAttribute("data-position", position++);
+                  let clone = $template.cloneNode(true);
+                  fragmento.append(clone);
+                  cursor.continue();
+                } else {
+                  let p = d.createElement("P");
+                  p.classList.add("none");
+                  p.classList.add("emptt");
+                  let text = d.createTextNode("vacio");
+                  p.append(text);
+                  d.querySelector(".container-list").innerHTML = "";
+                  d.querySelector(".container-list").append(p);
+                  d.querySelector(".container-list").append(fragmento);
+                  if (d.querySelector(".container-list").children.length !== 1)
+                    document.querySelector(".emptt").classList.add("none");
+                  else
+                    document.querySelector(".emptt").classList.remove("none");
+
+                  noActive();
+                }
+              };
+            });
+          }
+
+          // editar
+          function editar(key, title, text) {
+            let base = openBase("user", "readwrite");
+
+            let data = base.get(key);
+            data.onsuccess = (e) => {
+              element = e.target.result;
+              element.key = key;
+              element.title = title || element.title;
+              element.text = text || element.text;
+
+              let success = base.put(element, key);
+
+              success.onsuccess = (e) => {};
+            };
+          }
+
+          function borral(key) {
+            let base = openBase("user", "readwrite");
+
+            let success = base.delete(key);
+            success.onsuccess = (e) => {
+              leer();
+            };
+          }
+
+          // eventos
+          let $form = d.querySelector(".form-create");
+          $form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if ($form.guardar.dataset.type === "guardar") {
+              editar(await guardar($form.title.value, $form.task.value));
+              d.querySelector(".modal-create").classList.remove(
+                "fade-in-create"
+              );
+            } else {
+              editar(
+                parseInt($form.guardar.dataset.key),
+                $form.title.value,
+                $form.task.value
+              );
+              d.querySelector(".modal-create").classList.remove(
+                "fade-in-create"
+              );
+            }
+            $form.reset();
+            leer();
+          });
+
+          d.addEventListener("click", async (e) => {
+            // btn - guardar
+            if (
+              e.target.matches(".btn-guardar") ||
+              e.target.matches(".btn-guardar *")
+            ) {
+              d.querySelector(
+                ".title-modal-create"
+              ).textContent = `Creando nueva tarea`;
+              d.querySelector(".modal-create").classList.remove("none");
+              d.querySelector(".modal-create").classList.add("fade-in-create");
+              $form.guardar.dataset.type = "guardar";
+              $form.guardar.value = "Guardar";
+            }
+            if (
+              e.target.matches(".close-modal") ||
+              e.target.matches(".close-modal *")
+            ) {
+              d.querySelector(
+                ".title-modal-create"
+              ).textContent = `Creando nueva tarea`;
+              d.querySelector(".modal-create").classList.remove(
+                "fade-in-create"
+              );
+              $form.reset();
+            }
+            // editar
+            if (e.target.matches(".btn-edit")) {
+              d.querySelector(
+                ".title-modal-create"
+              ).textContent = `Editando elemento #${e.target.parentNode.dataset.position}`;
+              d.querySelector(".modal-create").classList.remove("none");
+              d.querySelector(".modal-create").classList.add("fade-in-create");
+              $form.guardar.dataset.type = "editar";
+              $form.guardar.dataset.key = e.target.parentNode.dataset.key;
+              $form.guardar.value = "Editar";
+              $form.task.value = e.target.previousElementSibling.textContent;
+              $form.title.value =
+                e.target.parentNode.firstElementChild.children[1].textContent;
+            }
+            //borral
+            if (
+              e.target.matches(".delete-task") ||
+              e.target.matches(".delete-task *")
+            ) {
+              let position =
+                e.target.parentNode.parentNode.parentNode.dataset.position ||
+                e.target.parentNode.parentNode.dataset.position;
+
+              let key =
+                e.target.parentNode.parentNode.parentNode.dataset.key ||
+                e.target.parentNode.parentNode.dataset.key;
+
+              if (
+                confirm(
+                  `Estas seguro de querer borral la tarea #${position} de la lista`
+                )
+              )
+                borral(parseInt(key));
+            }
+            // btn show text
+            if (e.target.matches(".bi-chevron-down")) {
+              e.target.classList.add("none");
+              e.target.nextElementSibling.classList.remove("none");
+              e.target.parentNode.parentNode.nextElementSibling.classList.remove(
+                "none"
+              );
+              e.target.parentNode.parentNode.parentNode.classList.add(
+                "task-despejado"
+              );
+            }
+            if (e.target.matches(".bi-chevron-up")) {
+              e.target.classList.add("none");
+              e.target.previousElementSibling.classList.remove("none");
+              e.target.parentNode.parentNode.nextElementSibling.classList.add(
+                "none"
+              );
+              e.target.parentNode.parentNode.parentNode.classList.remove(
+                "task-despejado"
+              );
+            }
+          });
+
+          // checked
+          d.getElementById("delete").addEventListener("change", (e) => {
+            if (e.target.checked) {
+              active();
+            } else {
+              noActive();
+            }
+          });
+
+          // ejecutar funciones
+          leer();
+        }
+        function ejecutar2() {
+          function openBase(base, tipo) {
+            let transaccion = bdColor.transaction([base], tipo);
+            return transaccion.objectStore(base);
+          }
+
+          // leer datos colores
+          function leer() {
+            let base = openBase("user", "readonly");
+
+            let apuntador = base.openCursor();
+            apuntador.onsuccess = (e) => {
+              let cursor = e.target.result;
+
+              if (cursor) {
+                $template2.querySelector(".first-color").style.backgroundColor =
+                  cursor.value.primer;
+                $template2.querySelector(
+                  ".second-color"
+                ).style.backgroundColor = cursor.value.segundo;
+                $template2.querySelector(".name-color").textContent =
+                  cursor.value.nombre;
+                let clone = $template2.cloneNode(true);
+                fragmento2.append(clone);
+                cursor.continue();
+              } else {
+                d.querySelector(".container-color").innerHTML = "";
+                let btn = d.createElement("BUTTON");
+                let btn2 = d.createElement("A");
+                btn.classList.add("style-btn");
+                btn2.classList.add("style-btn");
+                btn2.setAttribute("href", "main-hex.html");
+                btn2.setAttribute("target", "_blank");
+                let text = document.createTextNode("Color por defecto");
+                let text2 = document.createTextNode("Mas colores?");
+                btn.append(text);
+                btn2.append(text2);
+                btn.classList.add("color-default");
+                btn2.classList.add("more-color");
+                d.querySelector(".container-color").append(btn);
+                d.querySelector(".container-color").append(fragmento2);
+                d.querySelector(".container-color").append(btn2);
+              }
+            };
+          }
+          leer();
+
+          //-------------------------------------------------------------------------eventos
+          d.querySelector(".input-search-color").addEventListener(
+            "keyup",
+            (e) => {
+              for (const i of d.querySelector(".container-color").children) {
+                if (i === d.querySelector(".container-color").children[0]) {
+                  continue;
+                }
+                if (
+                  i === d.querySelector(".container-color").lastElementChild
+                ) {
+                  continue;
+                }
+                if (
+                  new RegExp(e.target.value, "igm").test(
+                    i.firstElementChild.textContent
+                  )
+                ) {
+                  i.classList.remove("none");
+                } else {
+                  i.classList.add("none");
+                }
+              }
+            }
+          );
+
+          ///////////////////////// evento al documento
+
+          d.addEventListener("click", (e) => {
+            if (
+              e.target.matches(".btn-style-colors") ||
+              e.target.matches(".btn-style-colors *")
+            ) {
+              d.querySelector(".principal-container-style").classList.remove(
+                "ocurtal-container-colors"
+              );
+
+              if (query >= 500)
+                d.querySelector(".btn-style-colors").classList.add(
+                  "ocurtal-btn"
+                );
+            }
+            if (
+              e.target.matches(".close-colors") ||
+              e.target.matches(".close-colors *")
+            ) {
+              d.querySelector(".principal-container-style").classList.add(
+                "ocurtal-container-colors"
+              );
+              d.querySelector(".btn-style-colors").classList.remove(
+                "ocurtal-btn"
+              );
+            }
+            if (e.target.matches(".btn-change-text")) {
+              if (localStorage.getItem("text-color") === "white") {
+                d.querySelector(".btn-change-text").textContent =
+                  "Color de texto negro";
+                d.body.classList.add("body-color");
+                localStorage.setItem("text-color", "black");
+              } else {
+                d.querySelector(".btn-change-text").textContent =
+                  "Color de texto blanco";
+                d.body.classList.remove("body-color");
+                localStorage.setItem("text-color", "white");
+              }
+            }
+            if (e.target.matches(".invert")) {
+              first = e.target.parentNode.style.backgroundColor;
+              second = e.target.previousElementSibling.style.backgroundColor;
+
+              e.target.parentNode.style.backgroundColor = second;
+              e.target.previousElementSibling.style.backgroundColor = first;
+            }
+            if (
+              e.target.matches(".first-color") ||
+              e.target.matches(".second-color")
+            ) {
+              if (e.target.classList.contains("first-color")) {
+                d.documentElement.style.setProperty(
+                  "--principal-color",
+                  e.target.style.backgroundColor
+                );
+                d.documentElement.style.setProperty(
+                  "--second-color",
+                  e.target.children[1].style.backgroundColor
+                );
+                localStorage.setItem(
+                  "first-color",
+                  e.target.style.backgroundColor
+                );
+                localStorage.setItem(
+                  "second-color",
+                  e.target.children[1].style.backgroundColor
+                );
+              } else if (e.target.classList.contains("second-color")) {
+                d.documentElement.style.setProperty(
+                  "--principal-color",
+                  e.target.parentNode.style.backgroundColor
+                );
+                d.documentElement.style.setProperty(
+                  "--second-color",
+                  e.target.style.backgroundColor
+                );
+                localStorage.setItem(
+                  "first-color",
+                  e.target.parentNode.style.backgroundColor
+                );
+                localStorage.setItem(
+                  "second-color",
+                  e.target.style.backgroundColor
+                );
+              }
+
+              // --principal-color: #cda4e8;
+              // --second-color: #833888;
+            }
+            if (e.target.matches(".color-default")) {
+              localStorage.removeItem("first-color");
+              localStorage.removeItem("second-color");
+              d.documentElement.style.setProperty(
+                "--principal-color",
+                "#393939"
+              );
+              d.documentElement.style.setProperty("--second-color", "#1c1c1c");
+            }
+          });
+        }
+      }
+
+      indexeDB();
+    </script>
+  </body>
+</html>
